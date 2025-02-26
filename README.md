@@ -70,13 +70,13 @@ $ pip install pika
 
 ![img](https://github.com/travickiy67/RabbitMQ/blob/main/img/img2.4.png)
 
-*auto_ack=True, после прочтения сообщения сохраняются*  
+*auto_ack=True, после прочтения сообщения удаляется*  
 
 **Cкрин 3**  
 
 ![img](https://github.com/travickiy67/RabbitMQ/blob/main/img/img2.3.png)
 
-*auto_ack=False*  
+*auto_ack=False, сообщение сохраняется*  
 
 **Скрин 4-5**  
 
