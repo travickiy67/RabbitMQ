@@ -27,10 +27,13 @@
 
 [Срипт для установки](https://github.com/travickiy67/RabbitMQ/blob/main/iles/sh.sh)  
 
-**Скрин**
+**Скрин1**
 
 ![img](https://github.com/travickiy67/RabbitMQ/blob/main/img/img1.1.png)  
 
+**Скрин2**
+
+![img](https://github.com/travickiy67/RabbitMQ/blob/main/img/img1.2.png)  
 ---
 
 ### Задание 2. Отправка и получение сообщений
