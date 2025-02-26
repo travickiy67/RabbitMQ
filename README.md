@@ -33,7 +33,12 @@
 
 **Скрин2**
 
-![img](https://github.com/travickiy67/RabbitMQ/blob/main/img/img1.2.png)  
+![img](https://github.com/travickiy67/RabbitMQ/blob/main/img/img1.3.png)  
+
+**Скрин3**
+
+![img](https://github.com/travickiy67/RabbitMQ/blob/main/img/img1.4.png)  
+
 ---
 
 ### Задание 2. Отправка и получение сообщений
