@@ -159,7 +159,7 @@ $ rabbitmqadmin get queue='hello'
 
 **Скрин 10**
 
-![img](https://github.com/travickiy67/RabbitMQ/blob/main/img/img4ю0.png)
+![img](https://github.com/travickiy67/RabbitMQ/blob/main/img/img4.0.png)
 
 ## Дополнительные задания (со звёздочкой*)
 Эти задания дополнительные, то есть не обязательные к выполнению, и никак не повлияют на получение вами зачёта по этому домашнему заданию. Вы можете их выполнить, если хотите глубже шире разобраться в материале.
