@@ -3,7 +3,7 @@
 import pika
 
 credentials = pika.PlainCredentials('user_test', '24101967cO')
-parameters = pika.ConnectionParameters('mq2', '5672', '/', credentials)
+parameters = pika.ConnectionParameters('mq1', '5672', '/', credentials)
 connection = pika.BlockingConnection(parameters)
 #connection = pika.BlockingConnection(pika.ConnectionParameters('localhost'))
 channel = connection.channel()

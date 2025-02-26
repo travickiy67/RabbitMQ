@@ -108,26 +108,58 @@ $ cat /etc/hosts
 ```
 После этого ваши машины могут пинговаться по имени.
 
+**Поменял имена хостов, прописал в hosts. на сервере сменил полюзователя и дал ему права на host /**
+
+**Скрин 1**  
+
+![img](https://github.com/travickiy67/RabbitMQ/blob/main/img/img3.1.png)
+ 
 Затем объедините две машины в кластер и создайте политику ha-all на все очереди.
 
 *В качестве решения домашнего задания приложите скриншоты из веб-интерфейса с информацией о доступных нодах в кластере и включённой политикой.*
+
+**Скрин 2-5**
+
+![img](https://github.com/travickiy67/RabbitMQ/blob/main/img/img3.4.png)
+
+![img](https://github.com/travickiy67/RabbitMQ/blob/main/img/img3.5.png) 
+
+![img](https://github.com/travickiy67/RabbitMQ/blob/main/img/img3.6.png)
+
+![img](https://github.com/travickiy67/RabbitMQ/blob/main/img/img3.7.png)
+
 
 Также приложите вывод команды с двух нод:
 
 ```shell script
 $ rabbitmqctl cluster_status
+
 ```
+**Скрин 6-7**
+![img](https://github.com/travickiy67/RabbitMQ/blob/main/img/img3.2.png)
+
+![img](https://github.com/travickiy67/RabbitMQ/blob/main/img/img3.3.png)
 
 Для закрепления материала снова запустите скрипт producer.py и приложите скриншот выполнения команды на каждой из нод:
 
 ```shell script
 $ rabbitmqadmin get queue='hello'
 ```
+**Скрин 8-9**
+
+![img](https://github.com/travickiy67/RabbitMQ/blob/main/img/img3.8.png)
+
+![img](https://github.com/travickiy67/RabbitMQ/blob/main/img/img3.9.png)
 
 После чего попробуйте отключить одну из нод, желательно ту, к которой подключались из скрипта, затем поправьте параметры подключения в скрипте consumer.py на вторую ноду и запустите его.
 
 *Приложите скриншот результата работы второго скрипта.*
 
+**Перенаправил на вторую ноду**
+
+**Скрин 10**
+
+![img](https://github.com/travickiy67/RabbitMQ/blob/main/img/img4ю0.png)
 
 ## Дополнительные задания (со звёздочкой*)
 Эти задания дополнительные, то есть не обязательные к выполнению, и никак не повлияют на получение вами зачёта по этому домашнему заданию. Вы можете их выполнить, если хотите глубже шире разобраться в материале.
