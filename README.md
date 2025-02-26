@@ -25,7 +25,7 @@
 
 *Итогом выполнения домашнего задания будет приложенный скриншот веб-интерфейса RabbitMQ.*
 
-[Срипт для установки](https://github.com/travickiy67/RabbitMQ/blob/main/iles/sh.sh)  
+[Срипт для установки](https://github.com/travickiy67/RabbitMQ/blob/main/files/sh.sh)  
 
 **Скрин1**
 
@@ -52,14 +52,47 @@
 ```shell script
 $ pip install pika
 ```
+**Добавил нового пользователя и виртуальный хост, в скрипты добавленна еще одна очередь и сообщение. Первые запуски были с очередью helo.**  
+[producer.py](https://github.com/travickiy67/RabbitMQ/blob/main/files/producer.py)
 
+[consumer.py](https://github.com/travickiy67/RabbitMQ/blob/main/files/consumer1.py)
+ 
 Зайдите в веб-интерфейс, найдите очередь под названием hello и сделайте скриншот.
 После чего запустите второй скрипт consumer.py и сделайте скриншот результата выполнения скрипта
 
 *В качестве решения домашнего задания приложите оба скриншота, сделанных на этапе выполнения.*
 
+**Скрин 1**  
+
+![img](https://github.com/travickiy67/RabbitMQ/blob/main/img/img2.2.png)
+
+**Скрин 2**  
+
+![img](https://github.com/travickiy67/RabbitMQ/blob/main/img/img2.4.png)
+
+*auto_ack=True, после прочтения сообщения сохраняются*  
+
+**Cкрин 3**  
+
+![img](https://github.com/travickiy67/RabbitMQ/blob/main/img/img2.3.png)
+
+*auto_ack=False*  
+
+**Скрин 4-5**  
+
+![img](https://github.com/travickiy67/RabbitMQ/blob/main/img/img2.5.png)  
+
+![img](https://github.com/travickiy67/RabbitMQ/blob/main/img/img2.6.png)  
+
 Для закрепления материала можете попробовать модифицировать скрипты, чтобы поменять название очереди и отправляемое сообщение.
 
+*Добавил еще очередь и сообщение*  
+
+**Скрин 6-7**
+
+![img](https://github.com/travickiy67/RabbitMQ/blob/main/img/img2.7.png)   
+
+![img](https://github.com/travickiy67/RabbitMQ/blob/main/img/img2.8.png)  
 ---
 
 ### Задание 3. Подготовка HA кластера
