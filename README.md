@@ -173,7 +173,8 @@ $ rabbitmqadmin get queue='hello'
 
 **Заработал не сразу, пришлось иного покапать информации. Саму программу не сложно, но чтобы подтянуть все условия, оказалось не так просто**  
 
-[Плейбук=>](https://github.com/travickiy67/RabbitMQ/blob/main/files/rabbitmq.yml)
+[Плейбук=>](https://github.com/travickiy67/RabbitMQ/blob/main/files/rabbitmq.yml)  
+
 **Скрин 1-3**  
 
 ![img](https://github.com/travickiy67/RabbitMQ/blob/main/img/img5.0.png)
