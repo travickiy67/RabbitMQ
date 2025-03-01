@@ -1,4 +1,5 @@
 ---
+#Используется соединение по псевдонимам, инвентори находится в папке с плейбуком
 - name: RabbitMQ ha-all cluster
   hosts: master, client
   become: yes
@@ -79,14 +80,7 @@
       apt:
         name: rabbitmq-server
         state: fixed
-#    - name: change hosts
-#      blockinfile:
-#        path: /etc/hosts
-#       block: "{{ rabbitmq_hosts }}"
-#        owner: root
-#        group: root
-#        mode: 0644
-#      when: update_hosts
+#Замена файла hosts из шаблона
     - name: change hosts 
       template:
         src: ./hosts.j2
@@ -95,13 +89,6 @@
         group: root
         mode: 0644
 
-#    - name: change host.ini
-#      template:
-#        src: ./host.ini.j2
-#        dest: ./host.ini
-#        owner: travitskii
-#        group: travitskii
-#        mode: 0664
 
     - name: backup old erlang cookie
       shell: cp -a /var/lib/rabbitmq/.erlang.cookie /var/lib/rabbitmq/.erlang.cookie.old
