@@ -1,0 +1,192 @@
+---
+- name: RabbitMQ ha-all cluster
+  hosts: master, client
+  become: yes
+  vars:
+#    rabbitmq_hosts:
+
+    rabbitmq_cluster_master: mq
+    update_hosts: true
+    rabbitmq_create_cluster: yes
+    rabbitmq_erlang_cookie: H6aW9q5w21imtFsymETVZDCE853KheyFD+/NQ+40ib7I/BxsMHqrztQc
+    rabbitmq_plugins:
+      - rabbitmq_management
+#Handlers are tasks that only run when notified.
+  handlers:
+    - name: stop rabbitmq-server
+      service: name=rabbitmq-server state=stopped
+    - name: restart rabbitmq-server
+      service: name=rabbitmq-server state=restarted
+    - name: start rabbitmq-server
+      service: name=rabbitmq-server state=started
+  tasks:
+    - name: "Team RabbitMQ's main signing key"
+      ansible.builtin.shell: curl -1sLf "https://keys.openpgp.org/vks/v1/by-fingerprint/0A9AF2115F4687BD29803A206B73A36E6026DFCA" | sudo gpg --dearmor | sudo tee /usr/share/keyrings/com.rabbitmq.team.gpg > /dev/null
+
+    - name: "Cloudsmith: modern Erlang repository"
+      ansible.builtin.shell: curl -1sLf https://dl.cloudsmith.io/public/rabbitmq/rabbitmq-erlang/gpg.E495BB49CC4BBE5B.key | sudo gpg --dearmor | sudo tee /usr/share/keyrings/io.cloudsmith.rabbitmq.E495BB49CC4BBE5B.gpg > /dev/null
+
+    - name: "Cloudsmith: RabbitMQ repository"
+      ansible.builtin.shell: curl -1sLf https://dl.cloudsmith.io/public/rabbitmq/rabbitmq-server/gpg.9F4587F226208342.key | sudo gpg --dearmor | sudo tee /usr/share/keyrings/io.cloudsmith.rabbitmq.9F4587F226208342.gpg > /dev/null
+
+    - name: update apt cache
+      apt:
+        update_cache: yes
+    - name: install pip
+      apt:
+        name: 
+          - python3
+          - python3-pip
+        state: fixed
+      changed_when: false
+    - name: install python pika
+      pip:
+        name:
+          - pika
+        executable: pip3
+    - name: update apt cache
+      apt:
+        update_cache: yes
+    - name: install python pika
+      pip:
+        name:
+          - pika
+        executable: pip3
+    - name: install Erlang packages and Deps
+      apt:
+        name:
+          - curl
+          - gnupg
+          - apt-transport-https
+          - erlang-base
+          - erlang-asn1
+          - erlang-crypto
+          - erlang-eldap
+          - erlang-ftp
+          - erlang-inets
+          - erlang-mnesia
+          - erlang-os-mon
+          - erlang-parsetools
+          - erlang-public-key
+          - erlang-runtime-tools
+          - erlang-snmp 
+          - erlang-ssl
+          - erlang-syntax-tools
+          - erlang-tftp
+          - erlang-tools
+          - erlang-xmerl
+    - name: install Rabbitmq
+      apt:
+        name: rabbitmq-server
+        state: fixed
+#    - name: change hosts
+#      blockinfile:
+#        path: /etc/hosts
+#       block: "{{ rabbitmq_hosts }}"
+#        owner: root
+#        group: root
+#        mode: 0644
+#      when: update_hosts
+    - name: change hosts 
+      template:
+        src: ./hosts.j2
+        dest: /etc/hosts
+        owner: root
+        group: root
+        mode: 0644
+
+#    - name: change host.ini
+#      template:
+#        src: ./host.ini.j2
+#        dest: ./host.ini
+#        owner: travitskii
+#        group: travitskii
+#        mode: 0664
+
+    - name: backup old erlang cookie
+      shell: cp -a /var/lib/rabbitmq/.erlang.cookie /var/lib/rabbitmq/.erlang.cookie.old
+      changed_when: false
+#Таск для копирования файла-шаблона erlang.cookie.
+    - name: updating rabbitmq erlang cookie 
+      template:
+        src: erlang.cookie.j2
+        dest: /var/lib/rabbitmq/.erlang.cookie
+        owner: rabbitmq
+        group: rabbitmq
+        mode: 0400
+#Tasks can instruct one or more handlers to execute using the notify keyword. The notify keyword can be applied to a task and accepts a list of handler names that are notified on a task change.
+      notify:
+        restart rabbitmq-server
+      when: rabbitmq_create_cluster
+#Meta tasks are a special kind of task which can influence Ansible internal execution or state. flush_handlers makes Ansible run any handler tasks which have thus far been notified.
+    - meta: flush_handlers
+
+    - name: remove old erlang cookie
+      file:
+        path: /var/lib/rabbitmq/.erlang.cookie.old
+        state: absent
+      changed_when: false
+#Включаем менеджмент плагин
+    - name: Enable the plugins is installed
+      rabbitmq_plugin:
+        names: "{{ item }}"
+        state: enabled
+      with_items: "{{ rabbitmq_plugins }}"
+      notify:
+        restart rabbitmq-server
+#Запускаем службу    
+    - name: rabbitmq service started and enabled
+      service:
+        name: rabbitmq-server
+        enabled: yes
+        state: started
+#Выполняем на клиентских хостах, чтоб не отключать мастер
+- name: RabbitMQ client cluster
+  hosts: client
+  become: yes
+  tasks:
+    - name: add to cluster
+      block:
+        - name: stop rabbitmq app
+          command: rabbitmqctl stop_app
+
+        - name: add this node to cluster
+          command: rabbitmqctl join_cluster rabbit@mq
+
+        - name: start rabbitmq app
+          command: rabbitmqctl start_app
+#Добавляем нового пользователя и назначение ему прав.
+- name: RabbitMQ master cluster
+  hosts: master
+
+  become: yes
+  tasks:
+    - name: create user
+      shell: rabbitmqctl add_user travitskii 24101967cO
+      register: res
+      failed_when: res.rc != 70 and res.rc != 0
+      changed_when: res.rc != 70
+
+    - name: list permissions for user
+      shell: rabbitmqctl list_permissions
+      register: list_permissions
+      changed_when: false
+
+    - name: set permissions on / vhost
+      shell: rabbitmqctl set_permissions travitskii ".*" ".*" ".*"
+      when: list_permissions.stdout.find("travitskii") == -1
+
+    - name: set user tag
+      shell: rabbitmqctl set_user_tags travitskii administrator
+      when: list_permissions.stdout.find("travitskii") == -1
+#Назначем ha-all
+    - name: check if ha-mode is already enabled
+      shell: rabbitmqctl list_policies
+      register: list_policies
+      changed_when: false
+
+    - name: set ha-mode to exactly two nodes for all queues for backup
+      shell: rabbitmqctl set_policy ha-all "" '{"ha-mode":"all","ha-sync-mode":"automatic"}'
+      register: res
+      failed_when: res.rc != 0
+      when: list_policies.stdout.find("ha-all") == -1

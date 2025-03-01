@@ -1,0 +1,14 @@
+#ansible_host=travitskii@qm ansible_connection=ssh ansible_user=travitskii
+[master]
+mq
+[client]
+mq1
+mq2
+[all:vars]
+ansible_sudo_pass=24101967cO
+rabbitmq_create_cluster: yes
+#qm
+ansible_python_interpreter=/usr/bin/python3
+#192.168.0.7     mq
+#192.168.0.4     mq1
+#192.168.0.8     mq2
