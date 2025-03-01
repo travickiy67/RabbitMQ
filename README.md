@@ -183,3 +183,6 @@ $ rabbitmqadmin get queue='hello'
 
 ![img](https://github.com/travickiy67/RabbitMQ/blob/main/img/img5.2.png)
 
+**Обновленный playbook способный установить rabbitmq на любое количество машин. Требуется только редактирование файлов шаблонов, и связанность машин по SSH, (предпстительно). Необходимо знать IP адреса и имена машин для редактирования файлов шаблона.**  
+
+[Playbook_update](https://github.com/travickiy67/RabbitMQ/tree/main/update_playbook)
